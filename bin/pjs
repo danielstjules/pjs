@@ -1,0 +1,112 @@
+#!/usr/bin/env node
+
+var fs      = require('fs');
+var program = require('commander');
+var pjs     = require('../lib/pjs');
+
+var intro = "  Functions and expressions are invoked in the following order:\n" +
+            "  filter, map, reduce";
+
+program
+  .version(require('../package.json').version)
+  .usage("[options] [files ...]\n\n" + intro)
+  .option('-e, --explicit', 'bind lines to $')
+  .option('-f, --filter <exp>', 'filter by a boolean expression')
+  .option('-m, --map <exp>', 'map values using the expression')
+  .option('-r, --reduce <sum|avg|concat|function>',
+    'reduce using a function')
+  .parse(process.argv);
+
+// Print help if no actions were provided
+if (!program.filter && !program.map && !program.reduce) {
+  program.help();
+}
+
+// Assume all unconsumed arguments are paths
+var paths = program.args || [];
+
+// Build input array
+var inputHandler = function(err, accumulator) {
+  if (err) {
+    console.error(err);
+    process.exit(3);
+  }
+
+  // Apply filter, map and reduce, and output results
+  ['filter', 'map', 'reduce'].forEach(function(action) {
+    if (program[action]) {
+      accumulator = pjs[action](accumulator, program.explicit);
+    }
+  });
+
+  if (accumulator instanceof Array) {
+    console.log(accumulator.join("\n"));
+  } else {
+    console.log(accumulator);
+  }
+};
+
+// Read input and process
+if (paths.length) {
+  readFiles(paths, inputHandler);
+} else {
+  readStdin(inputHandler);
+}
+
+function readFiles(paths, fn) {
+  var input = [];
+
+  for (var i = 0; i < paths.length; i++) {
+    try {
+      input = input.concat(readFile(paths[i]));
+    } catch (err) {
+      return fn(new Error('Could not read ' + paths[i]));
+    }
+  }
+
+  fn(null, input);
+}
+
+function readFile(path) {
+  var pattern, data, newline, lines;
+
+  pattern = /\r\n|\r|\n/;
+  data = fs.readFileSync(path, {encoding: 'utf8'});
+
+  newline = data.match(pattern);
+  lines = data.split(newline);
+
+  // Ignore an empty last line
+  if (!lines[lines.length - 1]) {
+    lines.pop();
+  }
+
+  return lines;
+}
+
+function readStdin(fn) {
+  var data = '';
+  process.stdin.setEncoding('utf8');
+
+  process.stdin.on('readable', function() {
+    var chunk = process.stdin.read();
+    if (chunk !== null) {
+      data += chunk;
+    }
+  });
+
+  process.stdin.on('end', function() {
+    var newline, pattern, lines;
+
+    pattern = /\r\n|\r|\n/;
+    newline = data.match(pattern);
+    lines = data.split(newline);
+
+    // Ignore an empty last line
+    if (!lines[lines.length - 1]) {
+      lines.pop();
+    }
+
+    return fn(null, lines);
+  });
+}
