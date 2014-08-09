@@ -1,0 +1,36 @@
+{
+  "name": "pipeable-js",
+  "version": "0.0.0",
+  "description": "Pipeable JavaScript",
+  "keywords": [
+    "pipe",
+    "pipeable",
+    "stdin",
+    "stdout",
+    "map",
+    "reduce"
+  ],
+  "author": "Daniel St. Jules <danielst.jules@gmail.com>",
+  "licenses": [
+    "MIT"
+  ],
+  "homepage": "https://github.com/danielstjules/pjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danielstjules/pjs.git"
+  },
+  "dependencies": {
+    "commander": "*"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "expect.js": "*",
+    "mock-fs": "*"
+  },
+  "bin": {
+    "pjs": "./bin/pjs"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --recursive -R spec spec"
+  }
+}

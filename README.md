@@ -1,4 +1,4 @@
 pjs
 ===
 
-Pipeable javascript
+Pipeable JavaScript. Say whaaa
