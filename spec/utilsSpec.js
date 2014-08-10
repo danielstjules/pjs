@@ -2,6 +2,12 @@ var expect = require('expect.js');
 var utils  = require('../lib/utils.js');
 
 describe('utils', function() {
+  describe('length', function() {
+    it('returns the length of an array', function() {
+      expect(utils.length([2, 4, 8])).to.be(3);
+    });
+  });
+
   describe('min', function() {
     it('returns the min value in an array', function() {
       expect(utils.min([2, 4, 8])).to.be(2);

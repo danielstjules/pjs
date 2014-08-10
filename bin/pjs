@@ -6,7 +6,7 @@ var pjs     = require('../lib/pjs');
 
 var intro = "  Functions and expressions are invoked in the following order:\n" +
             "  filter, map, reduce\n\n" +
-            "  Built-in reduce functions: min, max, sum, avg, concat";
+            "  Built-in reduce functions: length, min, max, sum, avg, concat";
 
 program
   .version(require('../package.json').version)

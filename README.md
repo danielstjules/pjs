@@ -52,7 +52,7 @@ Usage: pjs [options] [files ...]
 Functions and expressions are invoked in the following order:
 filter, map, reduce
 
-Built-in reduce functions: min, max, sum, avg, concat
+Built-in reduce functions: length, min, max, sum, avg, concat
 
 Options:
 
@@ -89,6 +89,11 @@ pjs -m 'split(",")[1]' file
 ### reduce
 
 ``` bash
+# Count lines in file
+# wc -l file
+# awk 'END { print NR }' file
+pjs -r length file
+
 # Sum all decimal numbers in a file
 # awk '{ sum += $1 } END { print sum }' file
 # perl -nle '$sum += $_ } END { print $sum' file
