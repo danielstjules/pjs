@@ -7,8 +7,8 @@ pipeable ruby.
 
 ## Overview
 
-pjs is a cli tool can accept input on stdin, or read from a list of files. The
-filter, map and reduce options take expressions to be ran, in that given order.
+pjs is a cli tool that can accept input on stdin, or read from a list of files.
+Its filter, map and reduce options take expressions to be ran, in that order.
 The expressions themselves can contain identifiers used by keys in
 String.prototpe, which will automatically be bound to the given line unless the
 `--explicit` flag is used. This let's you save a bit of typing with your
