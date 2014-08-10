@@ -3,6 +3,8 @@
 Pipeable JavaScript - a utility like sed/awk, but with JS! Inspired by pipeable
 ruby.
 
+[![Build Status](https://travis-ci.org/danielstjules/pjs.png)](https://travis-ci.org/danielstjules/pjs)
+
 ## Overview
 
 ```
