@@ -7,16 +7,33 @@ pipeable ruby.
 
 ## Overview
 
-```
+pjs is a cli tool can accept input on stdin, or read from a list of files. The
+filter, map and reduce options take expressions to be ran, in that given order.
+The expressions themselves can contain identifiers used by keys in
+String.prototpe, which will automatically be bound to the given line unless the
+`--explicit` flag is used. This let's you save a bit of typing with your
+one-liners, while still giving you access to all your JS string functions!
+Check out some of the examples below to see how they translate.
+
+``` bash
 # Return all lines longer than 5 chars
+# => lines.filter(function(line) { return line.length > 5; });
 ls -1 | pjs -f "length > 5"
 
 # Count characters in each line
+# => lines.map(function(line) { return line.length; });
 ls -1 | pjs -m "length"
 
 # Return lines longer than 5 chars, and remove any digits
-ls -1 | pjs -f "length > 5" -m "replace(/\d/g', '')"
+# => lines
+#      .filter(function(line) { return line.length > 5; })
+#      .map(function(line) { return line.replace(/\d/g, ''); });
+ls -1 | pjs -f "length > 5" -m "replace(/\d/g, '')"
+```
 
+## Examples
+
+``` bash
 # Explicitly bind lines to $
 ls -1 | pjs -e -f "$.length > 5" -m "$.replace(/\d/g', '')"
 
