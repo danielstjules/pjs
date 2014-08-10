@@ -10,7 +10,7 @@ pipeable ruby.
 pjs is a cli tool that can accept input on stdin, or read from a list of files.
 Its filter, map and reduce options take expressions to be ran, in that order,
 and applies them to the supplied input. The expressions themselves can contain
-identifiers used by keys in String.prototpe, which will automatically be bound
+identifiers used by keys in String.prototype, which will automatically be bound
 to the given line unless the `--explicit` flag is used. This let's you save a
 bit of typing with your one-liners, while still giving you access to all your
 JS string functions! Check out some of the examples below to see how they
@@ -40,7 +40,7 @@ ls -1 | pjs -f "length > 5" -m "replace(/\d/g, '')"
 
 ``` bash
 # Explicitly bind lines to $
-ls -1 | pjs -e -f "$.length > 5" -m "$.replace(/\d/g', '')"
+ls -1 | pjs -e -f "$.length > 5" -m "$.replace(/\d/g, '')"
 
 # Concatenate strings
 ls -1 | pjs -r concat
