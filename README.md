@@ -1,4 +1,4 @@
-![pjs](http://danielstjules.com/pjs/pjslogo.png)
+![pjs](http://danielstjules.com/pjs/pjs-logo.png)
 
 Pipeable JavaScript - an alternative to sed/awk scripts, with JS! Inspired by
 pipeable ruby.
@@ -36,22 +36,6 @@ ls -1 | pjs -m "'  ' + toUpperCase()"
 ls -1 | pjs -f "length > 5" -m "replace(/\d/g, '')"
 ```
 
-## Examples
-
-``` bash
-# Explicitly bind lines to $
-ls -1 | pjs -e -f "$.length > 5" -m "$.replace(/\d/g, '')"
-
-# Concatenate strings
-ls -1 | pjs -r concat
-
-# Sum all values
-cat numbers | pjs -r sum
-
-# Sum all values using an anonymous function
-cat numbers | pjs -r "function(i, j) { return i + j; }"
-```
-
 ## Installation
 
 It can be installed via `npm` using:
@@ -76,4 +60,20 @@ Options:
   -f, --filter <exp>                  filter by a boolean expression
   -m, --map <exp>                     map values using the expression
   -r, --reduce <sum|avg|concat|func>  reduce using a function
+```
+
+## Examples
+
+``` bash
+# Explicitly bind lines to $
+ls -1 | pjs -e -f "$.length > 5" -m "$.replace(/\d/g, '')"
+
+# Concatenate strings
+ls -1 | pjs -r concat
+
+# Sum all values
+cat numbers | pjs -r sum
+
+# Sum all values using an anonymous function
+cat numbers | pjs -r "function(i, j) { return i + j; }"
 ```
