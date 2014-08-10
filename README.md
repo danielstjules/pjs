@@ -19,21 +19,21 @@ translate.
 ``` bash
 # Return all lines longer than 5 chars
 # => lines.filter(function(line) { return line.length > 5; });
-ls -1 | pjs -f "length > 5"
+ls -1 | pjs -f 'length > 5'
 
 # Count characters in each line
 # => lines.map(function(line) { return line.length; });
-ls -1 | pjs -m "length"
+ls -1 | pjs -m 'length'
 
 # Uppercase and pad each line
 # => lines.map(function(line) { return '  ' + line.toUpperCase()"; });
-ls -1 | pjs -m "'  ' + toUpperCase()"
+ls -1 | pjs -m '"  " + toUpperCase()'
 
 # Return lines longer than 5 chars, and remove any digits
 # => lines
 #      .filter(function(line) { return line.length > 5; })
 #      .map(function(line) { return line.replace(/\d/g, ''); });
-ls -1 | pjs -f "length > 5" -m "replace(/\d/g, '')"
+ls -1 | pjs -f 'length > 5' -m 'replace(/\d/g, "")'
 ```
 
 ## Installation
