@@ -115,8 +115,11 @@ function readFile(path) {
  * @param {function} fn The callback to invoke
  */
 function readStdin(fn) {
-  var data = '';
+  var pattern, data;
+
   process.stdin.setEncoding('utf8');
+  pattern = /\r\n|\r|\n/;
+  data = '';
 
   process.stdin.on('readable', function() {
     var chunk = process.stdin.read();
@@ -126,9 +129,8 @@ function readStdin(fn) {
   });
 
   process.stdin.on('end', function() {
-    var newline, pattern, lines;
+    var newline, lines;
 
-    pattern = /\r\n|\r|\n/;
     newline = data.match(pattern);
     lines = data.split(newline);
 
