@@ -25,11 +25,26 @@ if (!program.filter && !program.map && !program.reduce) {
 // Assume all unconsumed arguments are paths
 var paths = program.args || [];
 
-// Build input array
-var inputHandler = function(err, accumulator) {
+// Read input and process
+if (paths.length) {
+  readFiles(paths, inputHandler);
+} else {
+  readStdin(inputHandler);
+}
+
+/**
+ * Callback function to be invoked after reading the necessary files or stdin.
+ * Given an array of lines to process, it invokes the filter, map, and reduce
+ * functions, if set, in that particular order. Prints the resulting lines
+ * when completed, and exits with an error code on error.
+ *
+ * @param {Error|null} err         An error object or null
+ * @param {string[]}   accumulator The lines to process
+ */
+function inputHandler(err, accumulator) {
   if (err) {
     console.error(err);
-    process.exit(3);
+    process.exit(1);
   }
 
   // Apply filter, map and reduce, and output results
@@ -44,15 +59,16 @@ var inputHandler = function(err, accumulator) {
   } else {
     console.log(accumulator);
   }
-};
-
-// Read input and process
-if (paths.length) {
-  readFiles(paths, inputHandler);
-} else {
-  readStdin(inputHandler);
 }
 
+/**
+ * Iterates over the given paths, reading the files and concatenating their
+ * lines. Invokes the callback, passing it the resulting array on success,
+ * or an error object on failure.
+ *
+ * @param {string[]} path The file paths
+ * @param {function} fn   The callback to invoke
+ */
 function readFiles(paths, fn) {
   var input = [];
 
@@ -67,6 +83,14 @@ function readFiles(paths, fn) {
   fn(null, input);
 }
 
+/**
+ * Reads a given file synchronously, for performance, and returns an array
+ * of lines, split on their newline.
+ *
+ * @param   {string}   path The file's path
+ * @returns {string[]} The file's lined, split on newlines
+ * @throws  {Error}    If the file could not be found or read
+ */
 function readFile(path) {
   var pattern, data, newline, lines;
 
@@ -84,6 +108,12 @@ function readFile(path) {
   return lines;
 }
 
+/**
+ * Reads from stdin, splitting the data on newlines. Upon completion, it
+ * invokes the given callback with the resulting array.
+ *
+ * @param {function} fn The callback to invoke
+ */
 function readStdin(fn) {
   var data = '';
   process.stdin.setEncoding('utf8');
