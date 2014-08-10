@@ -5,7 +5,8 @@ var program = require('commander');
 var pjs     = require('../lib/pjs');
 
 var intro = "  Functions and expressions are invoked in the following order:\n" +
-            "  filter, map, reduce";
+            "  filter, map, reduce\n\n" +
+            "  Built-in reduce functions: min, max, sum, avg, concat";
 
 program
   .version(require('../package.json').version)
@@ -13,7 +14,7 @@ program
   .option('-e, --explicit', 'bind lines to $')
   .option('-f, --filter <exp>', 'filter by a boolean expression')
   .option('-m, --map <exp>', 'map values using the expression')
-  .option('-r, --reduce <sum|avg|concat|func>',
+  .option('-r, --reduce <builtin|function>',
     'reduce using a function')
   .parse(process.argv);
 

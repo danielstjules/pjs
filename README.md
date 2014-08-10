@@ -1,7 +1,7 @@
 ![pjs](http://danielstjules.com/pjs/pjs-logo.png)
 
-Pipeable JavaScript - an alternative to sed/awk scripts, with JS! Inspired by
-pipeable ruby.
+Pipeable JavaScript - another utility like sed/awk/wc... but with JS! Quickly
+filter, map and reduce from the command line. Inspired by pipeable ruby.
 
 [![Build Status](https://travis-ci.org/danielstjules/pjs.png)](https://travis-ci.org/danielstjules/pjs)
 
@@ -52,28 +52,60 @@ Usage: pjs [options] [files ...]
 Functions and expressions are invoked in the following order:
 filter, map, reduce
 
+Built-in reduce functions: min, max, sum, avg, concat
+
 Options:
 
-  -h, --help                          output usage information
-  -V, --version                       output the version number
-  -e, --explicit                      bind lines to $
-  -f, --filter <exp>                  filter by a boolean expression
-  -m, --map <exp>                     map values using the expression
-  -r, --reduce <sum|avg|concat|func>  reduce using a function
+  -h, --help                       output usage information
+  -V, --version                    output the version number
+  -e, --explicit                   bind lines to $
+  -f, --filter <exp>               filter by a boolean expression
+  -m, --map <exp>                  map values using the expression
+  -r, --reduce <builtin|function>  reduce using a function
 ```
 
 ## Examples
 
+### filter
+
 ``` bash
-# Explicitly bind lines to $
-ls -1 | pjs -e -f "$.length > 5" -m "$.replace(/\d/g, '')"
+# Print all lines greater than 80 chars in length
+# awk 'length($0) > 80' file
+pjs -f 'length > 80' file
+```
 
-# Concatenate strings
-ls -1 | pjs -r concat
+### map
 
-# Sum all values
-cat numbers | pjs -r sum
+``` bash
+# Remove all digits
+# tr -d 0-9 < file
+pjs -m "replace(/\d/g, '')" file
 
-# Sum all values using an anonymous function
-cat numbers | pjs -r "function(i, j) { return i + j; }"
+# Get second item of each line in csv
+# awk -F "," '{print $2}' file
+pjs -m 'split(",")[1]' file
+```
+
+### reduce
+
+``` bash
+# Sum all decimal numbers in a file
+# awk '{ sum += $1 } END { print sum }' file
+# perl -nle '$sum += $_ } END { print $sum' file
+pjs -r 'function(i, j) { return Number(i) + Number(j); }' file
+pjs -r 'function(i, j) { return +i + +j; }' file
+pjs -r sum file
+
+# Concatenate all lines in multiple files
+# awk '{printf $0;}' file1 file2
+# cat file1 file2 | tr -d '\n'
+pjs -r concat file1 file2
+```
+
+### mixed
+
+``` bash
+# Print the length of the longest line
+# awk '{ if (length($0) > max) max = length($0) } END { print max }' file
+pjs -m 'length' -r max file
 ```

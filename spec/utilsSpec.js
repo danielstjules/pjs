@@ -2,6 +2,18 @@ var expect = require('expect.js');
 var utils  = require('../lib/utils.js');
 
 describe('utils', function() {
+  describe('min', function() {
+    it('returns the min value in an array', function() {
+      expect(utils.min([2, 4, 8])).to.be(2);
+    });
+  });
+
+  describe('max', function() {
+    it('returns the max value in an array', function() {
+      expect(utils.max([2, 4, 8])).to.be(8);
+    });
+  });
+
   describe('sum', function() {
     it('calculates the sum of the elements in an array', function() {
       var result = utils.sum([1, 2, 3, 4]);
