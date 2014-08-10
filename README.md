@@ -48,10 +48,10 @@ filter, map, reduce
 
 Options:
 
-  -h, --help                              output usage information
-  -V, --version                           output the version number
-  -e, --explicit                          bind lines to $
-  -f, --filter <exp>                      filter by a boolean expression
-  -m, --map <exp>                         map values using the expression
-  -r, --reduce <sum|avg|concat|function>  reduce using a function
+  -h, --help                          output usage information
+  -V, --version                       output the version number
+  -e, --explicit                      bind lines to $
+  -f, --filter <exp>                  filter by a boolean expression
+  -m, --map <exp>                     map values using the expression
+  -r, --reduce <sum|avg|concat|func>  reduce using a function
 ```

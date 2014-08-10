@@ -37,4 +37,20 @@ describe('utils', function() {
       expect(result).to.be('footrue0');
     });
   });
+
+  describe('getBoundExpression', function() {
+    it('prepends identifiers that are keys in String.prototype by the var', function() {
+      var result = utils.getBoundExpression('trim()', '$');
+      expect(result).to.be('$.trim()');
+    });
+
+    it('ignores identifiers in which a prototype key is a substring', function() {
+      var identifiers = ['asubstr', 'substra', 'asubstra', '_substr',
+        'substr_', '_substr_', 'substr123'];
+
+      identifiers.forEach(function(str) {
+        expect(utils.getBoundExpression(str, '$')).to.be(str);
+      });
+    });
+  });
 });
