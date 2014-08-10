@@ -1,4 +1,4 @@
-# pjs
+![pjs](http://danielstjules.com/pjs/logo.png)
 
 Pipeable JavaScript - a utility like sed/awk, but with JS! Inspired by pipeable
 ruby.
