@@ -46,7 +46,7 @@ describe('utils', function() {
 
     it('ignores identifiers in which a prototype key is a substring', function() {
       var identifiers = ['asubstr', 'substra', 'asubstra', '_substr',
-        'substr_', '_substr_', 'substr123'];
+        'substr_', '_substr_', 'substr123', 'x.substr'];
 
       identifiers.forEach(function(str) {
         expect(utils.getBoundExpression(str, '$')).to.be(str);
