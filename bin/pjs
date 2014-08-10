@@ -4,18 +4,19 @@ var fs      = require('fs');
 var program = require('commander');
 var pjs     = require('../lib/pjs');
 
-var intro = "  Functions and expressions are invoked in the following order:\n" +
-            "  filter, map, reduce\n\n" +
-            "  Built-in reduce functions: length, min, max, sum, avg, concat";
+var summ = "  Functions and expressions are invoked in the following order:\n" +
+           "  filter, map, reduce\n\n" +
+           "  Built-in reduce functions: length, min, max, sum, avg, concat\n" +
+           "  Custom reduce expressions accept: prev, curr, i, array";
 
 program
   .version(require('../package.json').version)
-  .usage("[options] [files ...]\n\n" + intro)
+  .usage("[options] [files ...]\n\n" + summ)
   .option('-e, --explicit', 'bind lines to $')
   .option('-f, --filter <exp>', 'filter by a boolean expression')
   .option('-m, --map <exp>', 'map values using the expression')
-  .option('-r, --reduce <builtin|function>',
-    'reduce using a function')
+  .option('-r, --reduce <func|exp>',
+    'reduce using a function or expression')
   .parse(process.argv);
 
 // Print help if no actions were provided

@@ -39,6 +39,21 @@ describe('pjs', function() {
   });
 
   describe('reduce', function() {
+    it('returns the length when passed as the expression', function() {
+      var result = pjs.reduce([1, 2, 3], 'length');
+      expect(result).to.be(3);
+    });
+
+    it('returns the min when passed as the expression', function() {
+      var result = pjs.reduce([2, 4, 8], 'min');
+      expect(result).to.be(2);
+    });
+
+    it('returns the max when passed as the expression', function() {
+      var result = pjs.reduce([2, 4, 8], 'max');
+      expect(result).to.be(8);
+    });
+
     it('returns the sum when passed as the expression', function() {
       var result = pjs.reduce([1, 2, 3], 'sum');
       expect(result).to.be(6);
@@ -54,9 +69,14 @@ describe('pjs', function() {
       expect(result).to.be('123');
     });
 
-    it('accepts a custom function expression string', function() {
-      var result = pjs.reduce([1, 2, 3], 'function(i, j) { return i + j }');
+    it('accepts a custom expression, passing prev and curr', function() {
+      var result = pjs.reduce([1, 2, 3], 'prev + curr');
       expect(result).to.be(6);
+    });
+
+    it('accepts a custom expression, also passing i and array', function() {
+      var result = pjs.reduce([1, 2, 3], '3 * array[i]');
+      expect(result).to.be(9);
     });
   });
 });

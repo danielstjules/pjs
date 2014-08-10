@@ -53,15 +53,16 @@ Functions and expressions are invoked in the following order:
 filter, map, reduce
 
 Built-in reduce functions: length, min, max, sum, avg, concat
+Custom reduce expressions accept: prev, curr, i, array
 
 Options:
 
-  -h, --help                       output usage information
-  -V, --version                    output the version number
-  -e, --explicit                   bind lines to $
-  -f, --filter <exp>               filter by a boolean expression
-  -m, --map <exp>                  map values using the expression
-  -r, --reduce <builtin|function>  reduce using a function
+  -h, --help               output usage information
+  -V, --version            output the version number
+  -e, --explicit           bind lines to $
+  -f, --filter <exp>       filter by a boolean expression
+  -m, --map <exp>          map values using the expression
+  -r, --reduce <func|exp>  reduce using a function or expression
 ```
 
 ## Examples
@@ -97,8 +98,8 @@ pjs -r length file
 # Sum all decimal numbers in a file
 # awk '{ sum += $1 } END { print sum }' file
 # perl -nle '$sum += $_ } END { print $sum' file
-pjs -r 'function(i, j) { return Number(i) + Number(j); }' file
-pjs -r 'function(i, j) { return +i + +j; }' file
+pjs -r 'Number(prev) + Number(curr)' file
+pjs -r '(+prev) + (+curr)' file
 pjs -r sum file
 
 # Concatenate all lines in multiple files
