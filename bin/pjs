@@ -50,7 +50,7 @@ function inputHandler(err, accumulator) {
   // Apply filter, map and reduce, and output results
   ['filter', 'map', 'reduce'].forEach(function(action) {
     if (program[action]) {
-      accumulator = pjs[action](accumulator, program.explicit);
+      accumulator = pjs[action](accumulator, program[action], program.explicit);
     }
   });
 
