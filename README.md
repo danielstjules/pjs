@@ -36,6 +36,13 @@ ls -1 | pjs -m '"  " + toUpperCase()'
 ls -1 | pjs -f 'length > 5' -m 'replace(/\d/g, "")'
 ```
 
+When using the `--explicit` flag, the current line and value can be accessed
+via the $ variable.
+
+``` bash
+ls -1 | pjs -e -f '$.length > 5' -m '$.replace(/\d/g, "")'
+```
+
 ## Installation
 
 It can be installed via `npm` using:
