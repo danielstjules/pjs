@@ -67,6 +67,7 @@ Options:
   -h, --help               output usage information
   -V, --version            output the version number
   -e, --explicit           bind lines to $
+  -j, --json               output as json
   -f, --filter <exp>       filter by a boolean expression
   -m, --map <exp>          map values using the expression
   -r, --reduce <func|exp>  reduce using a function or expression

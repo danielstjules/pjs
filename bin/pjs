@@ -13,6 +13,7 @@ program
   .version(require('../package.json').version)
   .usage("[options] [files ...]\n\n" + summ)
   .option('-e, --explicit', 'bind lines to $')
+  .option('-j, --json', 'output as json')
   .option('-f, --filter <exp>', 'filter by a boolean expression')
   .option('-m, --map <exp>', 'map values using the expression')
   .option('-r, --reduce <func|exp>',
@@ -20,7 +21,8 @@ program
   .parse(process.argv);
 
 // Print help if no actions were provided
-if (!program.filter && !program.map && !program.reduce) {
+if (!program.filter && !program.map &&
+    !program.reduce && !program.json) {
   program.help();
 }
 
@@ -56,7 +58,9 @@ function inputHandler(err, accumulator) {
     }
   });
 
-  if (accumulator instanceof Array) {
+  if (accumulator instanceof Array && program.json) {
+    console.log(JSON.stringify(accumulator));
+  } else if (accumulator instanceof Array) {
     console.log(accumulator.join("\n"));
   } else {
     console.log(accumulator);
