@@ -8,10 +8,10 @@ filter, map and reduce from the command line. Inspired by pipeable ruby.
 ## Overview
 
 pjs is a cli tool that can accept input on stdin, or read from a list of files.
-Its filter, map and reduce options take expressions to be ran, in that order,
+Its filter, map and reduce options take expressions to be run, in that order,
 and applies them to the supplied input. The expressions themselves can contain
 identifiers used by keys in String.prototype, which will automatically be bound
-to the given line unless the `--explicit` flag is used. This let's you save a
+to the given line unless the `--explicit` flag is used. This lets you save a
 bit of typing with your one-liners, while still giving you access to all your
 JS string functions! Check out some of the examples below to see how they
 translate.
