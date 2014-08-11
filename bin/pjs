@@ -51,12 +51,26 @@ function inputHandler(err, accumulator) {
     process.exit(1);
   }
 
-  // Apply filter, map and reduce, and output results
-  ['filter', 'map', 'reduce'].forEach(function(action) {
-    if (program[action]) {
-      accumulator = pjs[action](accumulator, program[action], program.explicit);
+  var runActions = function() {
+    // Apply filter, map and reduce, and output results
+    ['filter', 'map', 'reduce'].forEach(function(action) {
+      if (program[action]) {
+        accumulator = pjs[action](accumulator, program[action], program.explicit);
+      }
+    });
+  };
+
+  try {
+    runActions();
+  } catch (e) {
+    if (e instanceof SyntaxError || e instanceof ReferenceError) {
+      console.error('Invalid expression :', e.message);
+    } else {
+      console.error(e.stack);
     }
-  });
+
+    process.exit(3);
+  }
 
   if (accumulator instanceof Array && program.json) {
     console.log(JSON.stringify(accumulator));
