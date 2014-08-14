@@ -20,12 +20,15 @@
     "url": "https://github.com/danielstjules/pjs.git"
   },
   "dependencies": {
-    "commander": "*"
+    "commander": "*",
+    "split": "0.3.0",
+    "streaming-json-stringify": "1.0.0"
   },
   "devDependencies": {
     "mocha": "*",
     "expect.js": "*",
-    "mock-fs": "*"
+    "mock-fs": "*",
+    "async": "*"
   },
   "bin": {
     "pjs": "./bin/pjs"
