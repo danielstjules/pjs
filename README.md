@@ -3,7 +3,7 @@
 Pipeable JavaScript - another utility like sed/awk/wc... but with JS! Quickly
 filter, map and reduce from the command line. Inspired by pipeable ruby.
 
-[![Build Status](https://travis-ci.org/danielstjules/pjs.png)](https://travis-ci.org/danielstjules/pjs)
+[![Build Status](https://api.travis-ci.org/danielstjules/pjs.png?branch=master)](https://travis-ci.org/danielstjules/pjs)
 
 ## Overview
 
