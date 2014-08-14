@@ -1,7 +1,8 @@
 ![pjs](http://danielstjules.com/pjs/pjs-logo.png)
 
 Pipeable JavaScript - another utility like sed/awk/wc... but with JS! Quickly
-filter, map and reduce from the command line. Inspired by pipeable ruby.
+filter, map and reduce from the command line. Features a streaming API.
+Inspired by pipeable ruby.
 
 [![Build Status](https://api.travis-ci.org/danielstjules/pjs.png?branch=master)](https://travis-ci.org/danielstjules/pjs)
 
@@ -43,6 +44,14 @@ via the $ variable.
 ls -1 | pjs -e -f '$.length > 5' -m '$.replace(/\d/g, "")'
 ```
 
+#### Streaming
+
+Unlike similar tools such as pythonpy and pru, pjs features a streaming API.
+This allows you to stream from both files and stdin, reducing memory when
+loading large data sets, or simply allowing you to pipe your logs as you
+`tail -f`. Since it doesn't block on input, it also allows you to see the
+progress of your data being processed.
+
 ## Installation
 
 It can be installed via `npm` using:
@@ -67,6 +76,7 @@ Options:
   -h, --help               output usage information
   -V, --version            output the version number
   -e, --explicit           bind lines to $
+  -i, --ignore             ignore empty lines
   -j, --json               output as json
   -f, --filter <exp>       filter by a boolean expression
   -m, --map <exp>          map values using the expression

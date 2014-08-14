@@ -2,6 +2,8 @@
 
 var fs      = require('fs');
 var program = require('commander');
+var split   = require('split');
+var async   = require('async');
 var pjs     = require('../lib/pjs');
 
 var summ = "  Functions and expressions are invoked in the following order:\n" +
@@ -13,12 +15,24 @@ program
   .version(require('../package.json').version)
   .usage("[options] [files ...]\n\n" + summ)
   .option('-e, --explicit', 'bind lines to $')
+  .option('-i, --ignore', 'ignore empty lines')
   .option('-j, --json', 'output as json')
   .option('-f, --filter <exp>', 'filter by a boolean expression')
   .option('-m, --map <exp>', 'map values using the expression')
   .option('-r, --reduce <func|exp>',
     'reduce using a function or expression')
   .parse(process.argv);
+
+process.on('uncaughtException', function(e) {
+  // Handle errors in expression syntax
+  if (e instanceof SyntaxError || e instanceof ReferenceError) {
+    console.error('Invalid expression :', e.message);
+    process.exit(3);
+  }
+
+  console.error(e.stack);
+  process.exit(1);
+});
 
 // Print help if no actions were provided
 if (!program.filter && !program.map &&
@@ -29,136 +43,76 @@ if (!program.filter && !program.map &&
 // Assume all unconsumed arguments are paths
 var paths = program.args || [];
 
-// Read input and process
+// Pipe input and process
+var dstStream = getDestination();
 if (paths.length) {
-  readFiles(paths, inputHandler);
+  pipeFiles(paths, dstStream);
 } else {
-  readStdin(inputHandler);
+  process.stdin.pipe(dstStream);
 }
 
 /**
- * Callback function to be invoked after reading the necessary files or stdin.
- * Given an array of lines to process, it invokes the filter, map, and reduce
- * functions, if set, in that particular order. Prints the resulting lines
- * when completed, and exits with an error code on error.
+ * Returns the destination stream to be used by a readable stream, such as
+ * stdin or a series of files. The destination stream is a split stream that
+ * pipes to the various actions, and finally, stdout.
  *
- * @param {Error|null} err         An error object or null
- * @param {string[]}   accumulator The lines to process
+ * @return {Stream} The destination stream
  */
-function inputHandler(err, accumulator) {
-  if (err) {
-    console.error(err);
-    process.exit(1);
-  }
+function getDestination() {
+  var prev, splitStream, ignoreStream, stream;
+  splitStream = split();
 
-  var runActions = function() {
-    // Apply filter, map and reduce, and output results
-    ['filter', 'map', 'reduce'].forEach(function(action) {
-      if (program[action]) {
-        accumulator = pjs[action](accumulator, program[action], program.explicit);
-      }
-    });
+  // Remove trailing line, and ignore empty lines if required
+  prev = pjs.ignore(!!program.ignore);
+  splitStream.pipe(prev);
+
+  // Since we're using object mode, we have to track when to
+  // output a string if writing to stdout
+  var outputString = {
+    filter: !(program.map || program.reduce || program.json),
+    map:    !(program.reduce || program.json),
+    reduce: !program.json
   };
 
-  try {
-    runActions();
-  } catch (e) {
-    if (e instanceof SyntaxError || e instanceof ReferenceError) {
-      console.error('Invalid expression :', e.message);
-    } else {
-      console.error(e.stack);
-    }
+  // Pipe to each action, when set
+  ['filter', 'map', 'reduce'].forEach(function(action) {
+    if (program[action]) {
+      stream = pjs[action](program[action], outputString[action],
+        program.explicit);
 
-    process.exit(3);
-  }
-
-  if (accumulator instanceof Array && program.json) {
-    console.log(JSON.stringify(accumulator));
-  } else if (accumulator instanceof Array) {
-    console.log(accumulator.join("\n"));
-  } else {
-    console.log(accumulator);
-  }
-}
-
-/**
- * Iterates over the given paths, reading the files and concatenating their
- * lines. Invokes the callback, passing it the resulting array on success,
- * or an error object on failure.
- *
- * @param {string[]} path The file paths
- * @param {function} fn   The callback to invoke
- */
-function readFiles(paths, fn) {
-  var input = [];
-
-  for (var i = 0; i < paths.length; i++) {
-    try {
-      input = input.concat(readFile(paths[i]));
-    } catch (err) {
-      return fn(new Error('Could not read ' + paths[i]));
-    }
-  }
-
-  fn(null, input);
-}
-
-/**
- * Reads a given file synchronously, for performance, and returns an array
- * of lines, split on their newline.
- *
- * @param   {string}   path The file's path
- * @returns {string[]} The file's lined, split on newlines
- * @throws  {Error}    If the file could not be found or read
- */
-function readFile(path) {
-  var pattern, data, newline, lines;
-
-  pattern = /\r\n|\r|\n/;
-  data = fs.readFileSync(path, {encoding: 'utf8'});
-
-  newline = data.match(pattern);
-  lines = data.split(newline);
-
-  // Ignore an empty last line
-  if (!lines[lines.length - 1]) {
-    lines.pop();
-  }
-
-  return lines;
-}
-
-/**
- * Reads from stdin, splitting the data on newlines. Upon completion, it
- * invokes the given callback with the resulting array.
- *
- * @param {function} fn The callback to invoke
- */
-function readStdin(fn) {
-  var pattern, data;
-
-  process.stdin.setEncoding('utf8');
-  pattern = /\r\n|\r|\n/;
-  data = '';
-
-  process.stdin.on('readable', function() {
-    var chunk = process.stdin.read();
-    if (chunk !== null) {
-      data += chunk;
+      prev.pipe(stream, {end: false});
+      prev = stream;
     }
   });
 
-  process.stdin.on('end', function() {
-    var newline, lines;
+  // Add the json stream, if enabled
+  if (program.json) {
+    stream = pjs.json(!program.reduce);
+    prev.pipe(stream);
+    prev = stream;
+  }
 
-    newline = data.match(pattern);
-    lines = data.split(newline);
+  prev.pipe(process.stdout);
 
-    // Ignore an empty last line
-    if (!lines[lines.length - 1]) {
-      lines.pop();
-    }
+  return splitStream;
+}
 
-    return fn(null, lines);
+/**
+ * Iterates over the given paths, reading the files and piping their data to
+ * the passed destination stream.
+ *
+ * @param {string[]} path      The file paths
+ * @param {Stream}   dstStream The destination stream
+ */
+function pipeFiles(paths, dstStream) {
+  // Keep the destination open between files
+  var opts = {end: false};
+
+  async.eachSeries(paths, function(path, next) {
+    fs.createReadStream(path)
+      .on('end', next)
+      .pipe(dstStream, opts);
+  }, function () {
+    dstStream.end();
   });
 }
