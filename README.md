@@ -46,11 +46,11 @@ ls -1 | pjs -e -f '$.length > 5' -m '$.replace(/\d/g, "")'
 
 #### Streaming
 
-Unlike similar tools such as pythonpy and pru, pjs features a streaming API.
-This allows you to stream from both files and stdin, reducing memory when
-loading large data sets, or simply allowing you to pipe your logs as you
-`tail -f`. Since it doesn't block on input, it also allows you to see the
-progress of your data being processed.
+Unlike similar tools such as pythonpy, pjs features a streaming API. This allows
+you to stream from both files and stdin, reducing memory when loading large data
+sets, or simply allowing you to pipe your logs as you `tail -f`. Since it
+doesn't block on input, it also allows you to see the progress of your data
+being processed.
 
 ## Installation
 
