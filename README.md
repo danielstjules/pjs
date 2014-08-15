@@ -133,3 +133,11 @@ pjs -r concat file1 file2
 # awk '{ if (length($0) > max) max = length($0) } END { print max }' file
 pjs -m 'length' -r max file
 ```
+
+## Comparison
+
+| Features              | pjs | pythonpy | pru |
+|-----------------------|-----|----------|-----|
+| Streaming             | Yes | No       | Yes |
+| Easy JSON output      | Yes | No       | No  |
+| Webscale<sup>TM</sup> | YES | No       | No  |
