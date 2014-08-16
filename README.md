@@ -44,14 +44,6 @@ via the $ variable.
 ls -1 | pjs -e -f '$.length > 5' -m '$.replace(/\d/g, "")'
 ```
 
-#### Streaming
-
-Unlike similar tools such as pythonpy, pjs features a streaming API. This allows
-you to stream from both files and stdin, reducing memory when loading large data
-sets, or simply allowing you to pipe your logs as you `tail -f`. Since it
-doesn't block on input, it also allows you to see the progress of your data
-being processed.
-
 ## Installation
 
 It can be installed via `npm` using:
@@ -68,6 +60,7 @@ Usage: pjs [options] [files ...]
 Functions and expressions are invoked in the following order:
 filter, map, reduce
 
+In addition to the line, all functions are passed i, its index
 Built-in reduce functions: length, min, max, sum, avg, concat
 Custom reduce expressions accept: prev, curr, i, array
 
@@ -88,6 +81,10 @@ Options:
 ### filter
 
 ``` bash
+# Print all odd lines
+# awk 'NR % 2 == 1' file
+pjs -f 'i % 2 == 0' file
+
 # Print all lines greater than 80 chars in length
 # awk 'length($0) > 80' file
 pjs -f 'length > 80' file
@@ -136,8 +133,9 @@ pjs -m 'length' -r max file
 
 ## Comparison
 
-| Features              | pjs | pythonpy | pru |
-|-----------------------|-----|----------|-----|
-| Streaming             | Yes | No       | Yes |
-| Easy JSON output      | Yes | No       | No  |
-| Webscale<sup>TM</sup> | YES | No       | No  |
+| Features              | pjs     | pythonpy  | pru        |
+|-----------------------|---------|-----------|------------|
+| Streaming             | Yes     | No        | Yes        |
+| Implementation        | Streams | Iterables | Generators |
+| Easy JSON output      | Yes     | No        | No         |
+| Webscale<sup>TM</sup> | YES     | No        | No         |

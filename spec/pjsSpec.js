@@ -27,6 +27,16 @@ describe('pjs', function() {
       });
     });
 
+    it("passes the line's index, i, to the function", function(done) {
+      var filter = pjs.filter('i % 2 === 0');
+
+      testStream(lines, filter, function(err, res) {
+        expect(err).to.be(null);
+        expect(res).to.eql(['a', 'foo']);
+        done();
+      });
+    });
+
     it('outputs newline delimited results if outputString is true', function(done) {
       var filter = pjs.filter('3 !== length', true);
 
@@ -65,6 +75,16 @@ describe('pjs', function() {
       testStream(lines, map, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(['A', 'B', 'FOO', 'BAR']);
+        done();
+      });
+    });
+
+    it("passes the line's index, i, to the function", function(done) {
+      var map = pjs.map('i');
+
+      testStream(lines, map, function(err, res) {
+        expect(err).to.be(null);
+        expect(res).to.eql(['0', '1', '2', '3']);
         done();
       });
     });

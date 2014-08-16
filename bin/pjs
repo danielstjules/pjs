@@ -8,6 +8,7 @@ var pjs     = require('../lib/pjs');
 
 var summ = "  Functions and expressions are invoked in the following order:\n" +
            "  filter, map, reduce\n\n" +
+           "  In addition to the line, all functions are passed i, its index\n" +
            "  Built-in reduce functions: length, min, max, sum, avg, concat\n" +
            "  Custom reduce expressions accept: prev, curr, i, array";
 
