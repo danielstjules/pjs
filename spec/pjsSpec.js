@@ -191,4 +191,26 @@ describe('pjs', function() {
       });
     });
   });
+
+  describe('ignore', function() {
+    it('ignores the last empty line resulting from split', function(done) {
+      var ignore = pjs.ignore();
+
+      testStream(['a', '', 'c', ''], ignore, function(err, res) {
+        expect(err).to.be(null);
+        expect(res).to.eql(['a', '', 'c']);
+        done();
+      });
+    });
+
+    it('ignores all empty lines when ignoreEmpty is true', function(done) {
+      var ignore = pjs.ignore(true);
+
+      testStream(['a', '', 'c', ''], ignore, function(err, res) {
+        expect(err).to.be(null);
+        expect(res).to.eql(['a', 'c']);
+        done();
+      });
+    });
+  });
 });
