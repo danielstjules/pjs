@@ -133,9 +133,12 @@ pjs -m 'length' -r max file
 
 ## Comparison
 
-| Features              | pjs     | pythonpy  | pru        |
-|-----------------------|---------|-----------|------------|
-| Streaming             | Yes     | No        | Yes        |
-| Implementation        | Streams | Iterables | Generators |
-| Easy JSON output      | Yes     | No        | No         |
-| Webscale<sup>TM</sup> | YES     | No        | No         |
+| Features              | pjs        | pythonpy               | pru        |
+|-----------------------|------------|------------------------|------------|
+| Language              | JavaScript | Python                 | Ruby       |
+| Streaming             | Yes        | Limited <sup>[1]</sup> | Yes        |
+| Implementation        | Streams    | Iterables              | Generators |
+| Easy JSON output      | Yes        | No                     | No         |
+| Webscale<sup>TM</sup> | YES        | No                     | No         |
+
+<sub>[1] Can't perform "tail -f logfile | py -x x"</sub>
