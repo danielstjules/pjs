@@ -18,7 +18,7 @@ exports.arrayStream = arrayStream = function(array) {
   return readable;
 };
 
-exports.testStream = testStream = function(array, transform, fn) {
+exports.testStream = testStream = function(array, transform, opts, fn) {
   array = array.slice(0);
   var readable = arrayStream(array);
   var result = [];
@@ -34,5 +34,5 @@ exports.testStream = testStream = function(array, transform, fn) {
     fn(null, result);
   });
 
-  readable.pipe(transform, {end: false}).pipe(dst);
+  readable.pipe(transform, opts).pipe(dst);
 };

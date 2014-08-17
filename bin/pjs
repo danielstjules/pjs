@@ -60,7 +60,7 @@ if (paths.length) {
  * @return {Stream} The destination stream
  */
 function getDestination() {
-  var prev, splitStream, ignoreStream, stream;
+  var prev, splitStream, ignoreStream, stream, outputString, opts;
   splitStream = split();
 
   // Remove trailing line, and ignore empty lines if required
@@ -69,10 +69,15 @@ function getDestination() {
 
   // Since we're using object mode, we have to track when to
   // output a string if writing to stdout
-  var outputString = {
+  outputString = {
     filter: !(program.map || program.reduce || program.json),
     map:    !(program.reduce || program.json),
     reduce: !program.json
+  };
+
+  // Stream pipe options
+  opts = {
+    reduce: {end: false}
   };
 
   // Pipe to each action, when set
@@ -81,7 +86,7 @@ function getDestination() {
       stream = pjs[action](program[action], outputString[action],
         program.explicit);
 
-      prev.pipe(stream, {end: false});
+      prev.pipe(stream, opts[action]);
       prev = stream;
     }
   });

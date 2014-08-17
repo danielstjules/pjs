@@ -10,7 +10,7 @@ describe('pjs', function() {
     it('does not modify the array if the exp is always true', function(done) {
       var filter = pjs.filter('true');
 
-      testStream(lines, filter, function(err, res) {
+      testStream(lines, filter, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(lines);
         done();
@@ -20,7 +20,7 @@ describe('pjs', function() {
     it('binds any string prototype keys to the line in question', function(done) {
       var filter = pjs.filter('length === 3');
 
-      testStream(lines, filter, function(err, res) {
+      testStream(lines, filter, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(['foo', 'bar']);
         done();
@@ -30,7 +30,7 @@ describe('pjs', function() {
     it("passes the line's index, i, to the function", function(done) {
       var filter = pjs.filter('i % 2 === 0');
 
-      testStream(lines, filter, function(err, res) {
+      testStream(lines, filter, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(['a', 'foo']);
         done();
@@ -40,7 +40,7 @@ describe('pjs', function() {
     it('outputs newline delimited results if outputString is true', function(done) {
       var filter = pjs.filter('3 !== length', true);
 
-      testStream(lines, filter, function(err, res) {
+      testStream(lines, filter, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(["a\n", "b\n"]);
         done();
@@ -50,7 +50,7 @@ describe('pjs', function() {
     it('requires the line be referenced as "$" if explicit is true', function(done) {
       var filter = pjs.filter('$.indexOf("b") !== -1', false, true);
 
-      testStream(lines, filter, function(err, res) {
+      testStream(lines, filter, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(['b', 'bar']);
         done();
@@ -62,7 +62,7 @@ describe('pjs', function() {
     it('modifies the array with the given expression', function(done) {
       var map = pjs.map('"i"');
 
-      testStream(lines, map, function(err, res) {
+      testStream(lines, map, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(['i', 'i', 'i', 'i']);
         done();
@@ -72,7 +72,7 @@ describe('pjs', function() {
     it('binds any string prototype keys to the line in question', function(done) {
       var map = pjs.map('toUpperCase()');
 
-      testStream(lines, map, function(err, res) {
+      testStream(lines, map, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(['A', 'B', 'FOO', 'BAR']);
         done();
@@ -82,7 +82,7 @@ describe('pjs', function() {
     it("passes the line's index, i, to the function", function(done) {
       var map = pjs.map('i');
 
-      testStream(lines, map, function(err, res) {
+      testStream(lines, map, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(['0', '1', '2', '3']);
         done();
@@ -92,7 +92,7 @@ describe('pjs', function() {
     it('outputs newline delimited results if outputString is true', function(done) {
       var map = pjs.map('toLowerCase()', true);
 
-      testStream(lines, map, function(err, res) {
+      testStream(lines, map, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(["a\n", "b\n", "foo\n", "bar\n"]);
         done();
@@ -102,7 +102,7 @@ describe('pjs', function() {
     it('requires the line be referenced as "$" if explicit is true', function(done) {
       var map = pjs.map('$.charAt(0)', false, true);
 
-      testStream(lines, map, function(err, res) {
+      testStream(lines, map, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(['a', 'b', 'f', 'b']);
         done();
@@ -114,7 +114,7 @@ describe('pjs', function() {
     it('returns the length when passed as the expression', function(done) {
       var reduce = pjs.reduce('length');
 
-      testStream([1, 2, 3], reduce, function(err, res) {
+      testStream([1, 2, 3], reduce, {end: false}, function(err, res) {
         expect(err).to.be(null);
         expect(res[0]).to.eql(3);
         done();
@@ -124,7 +124,7 @@ describe('pjs', function() {
     it('returns the min when passed as the expression', function(done) {
       var reduce = pjs.reduce('min');
 
-      testStream([2, 4, 8], reduce, function(err, res) {
+      testStream([2, 4, 8], reduce, {end: false}, function(err, res) {
         expect(err).to.be(null);
         expect(res[0]).to.eql(2);
         done();
@@ -134,7 +134,7 @@ describe('pjs', function() {
     it('returns the max when passed as the expression', function(done) {
       var reduce = pjs.reduce('max');
 
-      testStream([2, 4, 8], reduce, function(err, res) {
+      testStream([2, 4, 8], reduce, {end: false}, function(err, res) {
         expect(err).to.be(null);
         expect(res[0]).to.eql(8);
         done();
@@ -144,7 +144,7 @@ describe('pjs', function() {
     it('returns the sum when passed as the expression', function(done) {
       var reduce = pjs.reduce('sum');
 
-      testStream([1, 2, 3], reduce, function(err, res) {
+      testStream([1, 2, 3], reduce, {end: false}, function(err, res) {
         expect(err).to.be(null);
         expect(res[0]).to.eql(6);
         done();
@@ -154,7 +154,7 @@ describe('pjs', function() {
     it('returns the avg when passed as the expression', function(done) {
       var reduce = pjs.reduce('avg');
 
-      testStream([1, 2, 3], reduce, function(err, res) {
+      testStream([1, 2, 3], reduce, {end: false}, function(err, res) {
         expect(err).to.be(null);
         expect(res[0]).to.eql(2);
         done();
@@ -164,7 +164,7 @@ describe('pjs', function() {
     it('returns the concatenated string when passed "concat"', function(done) {
       var reduce = pjs.reduce('concat');
 
-      testStream([1, 2, 3], reduce, function(err, res) {
+      testStream([1, 2, 3], reduce, {end: false}, function(err, res) {
         expect(err).to.be(null);
         expect(res[0]).to.eql('123');
         done();
@@ -174,7 +174,7 @@ describe('pjs', function() {
     it('accepts a custom expression, passing prev and curr', function(done) {
       var reduce = pjs.reduce('prev + curr');
 
-      testStream([1, 2, 3], reduce, function(err, res) {
+      testStream([1, 2, 3], reduce, {end: false}, function(err, res) {
         expect(err).to.be(null);
         expect(res[0]).to.eql(6);
         done();
@@ -184,7 +184,7 @@ describe('pjs', function() {
     it('accepts a custom expression, also passing i and array', function(done) {
       var reduce = pjs.reduce('3 * array[i]');
 
-      testStream([1, 2, 3], reduce, function(err, res) {
+      testStream([1, 2, 3], reduce, {end: false}, function(err, res) {
         expect(err).to.be(null);
         expect(res[0]).to.eql(9);
         done();
@@ -196,7 +196,7 @@ describe('pjs', function() {
     it('ignores the last empty line resulting from split', function(done) {
       var ignore = pjs.ignore();
 
-      testStream(['a', '', 'c', ''], ignore, function(err, res) {
+      testStream(['a', '', 'c', ''], ignore, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(['a', '', 'c']);
         done();
@@ -206,7 +206,7 @@ describe('pjs', function() {
     it('ignores all empty lines when ignoreEmpty is true', function(done) {
       var ignore = pjs.ignore(true);
 
-      testStream(['a', '', 'c', ''], ignore, function(err, res) {
+      testStream(['a', '', 'c', ''], ignore, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(['a', 'c']);
         done();
@@ -215,19 +215,10 @@ describe('pjs', function() {
   });
 
   describe('json', function() {
-    var closeonEnd = function(stream) {
-      stream.on('pipe', function(src) {
-        src.on('end', function() {
-          stream.end();
-        });
-      });
-    };
-
     it('streams a single object when streamArray is false', function(done) {
       var json = pjs.json();
-      closeonEnd(json);
 
-      testStream([{test: 'value'}], json, function(err, res) {
+      testStream([{test: 'value'}], json, {}, function(err, res) {
         expect(err).to.be(null);
         expect(res).to.eql(['{"test":"value"}']);
         done();
@@ -237,9 +228,8 @@ describe('pjs', function() {
     it('streams a string json array when streamArray is true', function(done) {
       var array = [{test: 'object1'}, {test: 'object2'}];
       var json = pjs.json(true);
-      closeonEnd(json);
 
-      testStream(array, json, function(err, res) {
+      testStream(array, json, {}, function(err, res) {
         res = res.map(function(buffer) {
           return buffer.toString();
         });
@@ -252,7 +242,6 @@ describe('pjs', function() {
           '{"test":"object2"}',
           '\n]\n'
         ]);
-
         done();
       });
     });
