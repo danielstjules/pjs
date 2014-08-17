@@ -213,4 +213,48 @@ describe('pjs', function() {
       });
     });
   });
+
+  describe('json', function() {
+    var closeonEnd = function(stream) {
+      stream.on('pipe', function(src) {
+        src.on('end', function() {
+          stream.end();
+        });
+      });
+    };
+
+    it('streams a single object when streamArray is false', function(done) {
+      var json = pjs.json();
+      closeonEnd(json);
+
+      testStream([{test: 'value'}], json, function(err, res) {
+        expect(err).to.be(null);
+        expect(res).to.eql(['{"test":"value"}']);
+        done();
+      });
+    });
+
+    it('streams a string json array when streamArray is true', function(done) {
+      var array = [{test: 'object1'}, {test: 'object2'}];
+      var json = pjs.json(true);
+      closeonEnd(json);
+
+      testStream(array, json, function(err, res) {
+        res = res.map(function(buffer) {
+          return buffer.toString();
+        });
+
+        expect(err).to.be(null);
+        expect(res).to.eql([
+          '[\n',
+          '{"test":"object1"}',
+          ',\n',
+          '{"test":"object2"}',
+          '\n]\n'
+        ]);
+
+        done();
+      });
+    });
+  });
 });
