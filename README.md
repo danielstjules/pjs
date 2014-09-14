@@ -1,10 +1,10 @@
-![pjs](http://danielstjules.com/pjs/pjs-logo.png)
+![pjs](http://danielstjules.com/github/pjs-logo.png)
 
 Pipeable JavaScript - another utility like sed/awk/wc... but with JS! Quickly
 filter, map and reduce from the command line. Features a streaming API.
 Inspired by pipeable ruby.
 
-[![Build Status](https://api.travis-ci.org/danielstjules/pjs.png?branch=master)](https://travis-ci.org/danielstjules/pjs)
+[![Build Status](https://api.travis-ci.org/danielstjules/pjs.svg?branch=master)](https://travis-ci.org/danielstjules/pjs)
 
 ## Overview
 
