@@ -108,6 +108,21 @@ describe('pjs', function() {
         done();
       });
     });
+
+    it('encodes null values as an object to avoid ending the stream', function(done) {
+      var map = pjs.map('null', false, true);
+
+      testStream(lines, map, {}, function(err, res) {
+        expect(err).to.be(null);
+        expect(res).to.eql([
+          {value: null},
+          {value: null},
+          {value: null},
+          {value: null}
+        ]);
+        done();
+      });
+    });
   });
 
   describe('reduce', function() {
@@ -187,6 +202,16 @@ describe('pjs', function() {
       testStream([1, 2, 3], reduce, {end: false}, function(err, res) {
         expect(err).to.be(null);
         expect(res[0]).to.eql(9);
+        done();
+      });
+    });
+
+    it('encodes null values as an object to avoid ending the stream', function(done) {
+      var reduce = pjs.reduce('null');
+
+      testStream([1, 2, 3], reduce, {end: false}, function(err, res) {
+        expect(err).to.be(null);
+        expect(res[0]).to.eql({value: null});
         done();
       });
     });
