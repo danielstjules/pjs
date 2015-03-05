@@ -91,6 +91,16 @@ describe('utils', function() {
       expect(result).to.be('$.trim()');
     });
 
+    it('correctly attributes identifiers given leading whitespace', function() {
+      var result = utils.getBoundExpression('  trim()', '$');
+      expect(result).to.be('  $.trim()');
+    });
+
+    it('does not modify keys in object literals', function() {
+      var result = utils.getBoundExpression('{length: length}', '$');
+      expect(result).to.be('{length: $.length}');
+    });
+
     it('ignores identifiers in which a prototype key is a substring', function() {
       var identifiers = ['asubstr', 'substra', 'asubstra', '_substr',
         'substr_', '_substr_', 'substr123', 'x.substr'];

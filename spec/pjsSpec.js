@@ -123,6 +123,21 @@ describe('pjs', function() {
         done();
       });
     });
+
+    it('treats input as expressions, accepting object literals', function(done) {
+      var map = pjs.map('{length: length}');
+
+      testStream(lines, map, {}, function(err, res) {
+        expect(err).to.be(null);
+        expect(res).to.eql([
+          {length: 1},
+          {length: 1},
+          {length: 3},
+          {length: 3}
+        ]);
+        done();
+      });
+    });
   });
 
   describe('reduce', function() {
