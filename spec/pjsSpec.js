@@ -46,16 +46,6 @@ describe('pjs', function() {
         done();
       });
     });
-
-    it('requires the line be referenced as "$" if explicit is true', function(done) {
-      var filter = pjs.filter('$.indexOf("b") !== -1', false, true);
-
-      testStream(lines, filter, {}, function(err, res) {
-        expect(err).to.be(null);
-        expect(res).to.eql(['b', 'bar']);
-        done();
-      });
-    });
   });
 
   describe('map', function() {
@@ -99,8 +89,8 @@ describe('pjs', function() {
       });
     });
 
-    it('requires the line be referenced as "$" if explicit is true', function(done) {
-      var map = pjs.map('$.charAt(0)', false, true);
+    it('can reference the line as "$"', function(done) {
+      var map = pjs.map('$.charAt(0)', false);
 
       testStream(lines, map, {}, function(err, res) {
         expect(err).to.be(null);

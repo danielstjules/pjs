@@ -12,10 +12,9 @@ pjs is a cli tool that can accept input on stdin, or read from a list of files.
 Its filter, map and reduce options take expressions to be run, in that order,
 and applies them to the supplied input. The expressions themselves can contain
 identifiers used by keys in String.prototype, which will automatically be bound
-to the given line unless the `--explicit` flag is used. This lets you save a
-bit of typing with your one-liners, while still giving you access to all your
-JS string functions! Check out some of the examples below to see how they
-translate.
+to the given line. This lets you save a bit of typing with your one-liners,
+while still giving you access to all your JS string functions! Check out some
+of the examples below to see how they translate.
 
 ``` bash
 # Return all lines longer than 5 chars
@@ -37,11 +36,15 @@ ls -1 | pjs -m '"  " + toUpperCase()'
 ls -1 | pjs -f 'length > 5' -m 'replace(/\d/g, "")'
 ```
 
-When using the `--explicit` flag, the current line and value can be accessed
-via the $ variable.
+The current line and value can also be accessed via the $ variable, and the
+tool supports json output.
 
 ``` bash
-ls -1 | pjs -e -f '$.length > 5' -m '$.replace(/\d/g, "")'
+$ (echo 'foo' && echo 'foobar') | pjs -jm '{name: $, length: length}'
+[
+{"name":"foo","length":3},
+{"name":"foobar","length":6}
+]
 ```
 
 ## Installation
@@ -68,7 +71,6 @@ Options:
 
   -h, --help               output usage information
   -V, --version            output the version number
-  -e, --explicit           bind lines to $
   -i, --ignore             ignore empty lines
   -j, --json               output as json
   -f, --filter <exp>       filter by a boolean expression

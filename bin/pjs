@@ -15,7 +15,6 @@ var summ = "  Functions and expressions are invoked in the following order:\n" +
 program
   .version(require('../package.json').version)
   .usage("[options] [files ...]\n\n" + summ)
-  .option('-e, --explicit', 'bind lines to $')
   .option('-i, --ignore', 'ignore empty lines')
   .option('-j, --json', 'output as json')
   .option('-f, --filter <exp>', 'filter by a boolean expression')
@@ -83,8 +82,7 @@ function getDestination() {
   // Pipe to each action, when set
   ['filter', 'map', 'reduce'].forEach(function(action) {
     if (program[action]) {
-      stream = pjs[action](program[action], outputString[action],
-        program.explicit);
+      stream = pjs[action](program[action], outputString[action]);
 
       prev.pipe(stream, opts[action]);
       prev = stream;
