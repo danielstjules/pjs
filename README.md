@@ -36,21 +36,27 @@ ls -1 | pjs -m '"  " + toUpperCase()'
 ls -1 | pjs -f 'length > 5' -m 'replace(/\d/g, "")'
 ```
 
-The current line and value can also be accessed via the $ variable, and the
+The current line and value can also be accessed via the `$` variable, and the
 tool supports json output.
 
 ``` bash
-$ (echo 'foo' && echo 'foobar') | pjs -jm '{name: $, length: length}'
+(echo 'foo' && echo 'foobar') | pjs -jm '{name: $, length: length}'
 [
 {"name":"foo","length":3},
 {"name":"foobar","length":6}
 ]
 ```
 
-For convenience, pjs also includes lodash functions, which can be accessed by the `_` object.
+pjs also includes lodash functions, which can be accessed via the `_` object,
+and chained using $$.
 
 ``` bash
-$ echo 'hello' | pjs -m '_.upperFirst($)'
+echo 'hello' | pjs -m '_.upperFirst($)'
+# Hello
+
+echo 'please-titleize-this-sentence' | \
+pjs -m '$$.lowerCase().split(" ").map(_.upperFirst).join(" ")'
+# Please titleize this sentence
 ```
 
 ## Installation
@@ -108,11 +114,6 @@ pjs -m "replace(/\d/g, '')" file
 # Get second item of each line in csv
 # awk -F "," '{print $2}' file
 pjs -m 'split(",")[1]' file
-
-# A wrapper object is provided with $$ so that lodash
-# operations can be chained.
-echo 'please-titleize-this-sentence' | \
-pjs -m '$$.lowerCase().split(" ").map(_.upperFirst).join(" ")'
 ```
 
 ### reduce
