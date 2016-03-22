@@ -128,6 +128,26 @@ describe('pjs', function() {
         done();
       });
     });
+
+    it('it supports lodash functions', function(done) {
+      var map = pjs.map('_.upperFirst($)');
+
+      testStream(lines, map, {}, function(err, res) {
+        expect(err).to.be(null);
+        expect(res).to.eql(['A', 'B', 'Foo', 'Bar']);
+        done();
+      });
+    });
+
+    it('it creates a lodash chain when using $$', function(done) {
+      var map = pjs.map('$$.lowerCase().split(" ").map(_.upperFirst).join(" ")');
+
+      testStream(['implementing_titleize', 'forWords'], map, {}, function(err, res) {
+        expect(err).to.be(null);
+        expect(res).to.eql(['Implementing Titleize', 'For Words']);
+        done();
+      });
+    });
   });
 
   describe('reduce', function() {

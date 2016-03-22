@@ -47,6 +47,12 @@ $ (echo 'foo' && echo 'foobar') | pjs -jm '{name: $, length: length}'
 ]
 ```
 
+For convenience, pjs also includes lodash functions, which can be accessed by the `_` object.
+
+``` bash
+$ echo 'hello' | pjs -m '_.upperFirst($)'
+```
+
 ## Installation
 
 It can be installed via `npm` using:
@@ -102,6 +108,11 @@ pjs -m "replace(/\d/g, '')" file
 # Get second item of each line in csv
 # awk -F "," '{print $2}' file
 pjs -m 'split(",")[1]' file
+
+# A wrapper object is provided with $$ so that lodash
+# operations can be chained.
+echo 'please-titleize-this-sentence' | \
+pjs -m '$$.lowerCase().split(" ").map(_.upperFirst).join(" ")'
 ```
 
 ### reduce

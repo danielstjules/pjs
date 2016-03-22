@@ -22,6 +22,7 @@
   "dependencies": {
     "async": "*",
     "commander": "*",
+    "lodash": "^4.3.0",
     "split": "0.3.0",
     "streaming-json-stringify": "1.0.0"
   },
