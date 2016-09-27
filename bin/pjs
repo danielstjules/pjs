@@ -131,7 +131,6 @@ function pipeFiles(paths, dstStream) {
  * @return {string} The script with the added invocation or the original script
  */
 function supportRamdaPointFree(script) {
-  var scriptSize = script.length;
   // Append the invocation if the script starts with a ramda function and it
   // doesn't include the call already
   return ~script.indexOf('R.') && !(/\$\);?$/.test(script))
