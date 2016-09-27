@@ -81,8 +81,10 @@ function getDestination() {
 
   // Pipe to each action, when set
   ['filter', 'map', 'reduce'].forEach(function(action) {
-    if (program[action]) {
-      stream = pjs[action](program[action], outputString[action]);
+    var userScript = program[action];
+    if (userScript) {
+      userScript = supportRamdaPointFree(userScript);
+      stream = pjs[action](userScript, outputString[action]);
 
       prev.pipe(stream, opts[action]);
       prev = stream;
@@ -119,4 +121,20 @@ function pipeFiles(paths, dstStream) {
   }, function () {
     dstStream.end();
   });
+}
+
+/**
+ * Append the input token as a function call if the script expression is using
+ * pointfree style
+ *
+ * @param  {string} script The user-defined script
+ * @return {string} The script with the added invocation or the original script
+ */
+function supportRamdaPointFree(script) {
+  var scriptSize = script.length;
+  // Append the invocation if the script starts with a ramda function and it
+  // doesn't include the call already
+  return ~script.indexOf('R.') && !(/\$\);?$/.test(script))
+    ? script + '($)'
+    : script;
 }
