@@ -56,7 +56,7 @@ echo 'hello' | pjs -m '_.upperFirst($)'
 
 echo 'please-titleize-this-sentence' | \
 pjs -m '$$.lowerCase().split(" ").map(_.upperFirst).join(" ")'
-# Please titleize this sentence
+# Please Titleize This Sentence
 ```
 
 ## Installation
