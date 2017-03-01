@@ -48,7 +48,7 @@ tool supports json output.
 ```
 
 pjs also includes lodash functions, which can be accessed via the `_` object,
-and chained using $$.
+and chained using $$
 
 ``` bash
 echo 'hello' | pjs -m '_.upperFirst($)'
@@ -56,6 +56,14 @@ echo 'hello' | pjs -m '_.upperFirst($)'
 
 echo 'please-titleize-this-sentence' | \
 pjs -m '$$.lowerCase().split(" ").map(_.upperFirst).join(" ")'
+# Please Titleize This Sentence
+```
+
+as well as Ramda and point-free style
+
+``` bash
+echo 'please-titleize-this-sentence' | \
+pjs -m "R.compose(R.replace(/(^|\s)\w/g, R.toUpper), R.replace(/-/g, ' '))"
 # Please Titleize This Sentence
 ```
 
@@ -78,6 +86,8 @@ filter, map, reduce
 All functions are passed the line ($) and index (i)
 Built-in reduce functions: length, min, max, sum, avg, concat
 Custom reduce expressions accept: prev, curr, i, array
+Includes lodash (_), and can be chained using $$
+Supports Ramda (R) and point-free style
 
 Options:
 
