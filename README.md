@@ -75,7 +75,7 @@ Usage: pjs [options] [files ...]
 Functions and expressions are invoked in the following order:
 filter, map, reduce
 
-In addition to the line, all functions are passed i, its index
+All functions are passed the line ($) and index (i)
 Built-in reduce functions: length, min, max, sum, avg, concat
 Custom reduce expressions accept: prev, curr, i, array
 
