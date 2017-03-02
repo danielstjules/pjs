@@ -37,6 +37,6 @@
     "pjs": "./bin/pjs"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --recursive -R spec spec"
+    "test": "mocha --recursive -R spec spec"
   }
 }
