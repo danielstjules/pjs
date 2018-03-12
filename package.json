@@ -34,7 +34,7 @@
     "async": "*"
   },
   "bin": {
-    "pjs": "./bin/pjs"
+    "pjs": "bin/pjs"
   },
   "scripts": {
     "test": "mocha --recursive -R spec spec"
