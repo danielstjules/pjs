@@ -1,6 +1,6 @@
 {
   "name": "pipeable-js",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Pipeable JavaScript",
   "keywords": [
     "pipe",
@@ -11,27 +11,24 @@
     "reduce"
   ],
   "author": "Daniel St. Jules <danielst.jules@gmail.com>",
-  "licenses": [
-    "MIT"
-  ],
+  "license": "MIT",
   "homepage": "https://github.com/danielstjules/pjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/danielstjules/pjs.git"
   },
   "dependencies": {
-    "async": "*",
-    "commander": "*",
-    "lodash": "^4.3.0",
-    "ramda": "^0.22.1",
-    "split": "0.3.0",
-    "streaming-json-stringify": "1.0.0"
+    "async": "^2.6.2",
+    "commander": "^2.20.3",
+    "lodash": "^4.17.21",
+    "ramda": "^0.28.0",
+    "split": "^0.3.3",
+    "streaming-json-stringify": "^1.0.1"
   },
   "devDependencies": {
-    "mocha": "*",
-    "expect.js": "*",
-    "mock-fs": "*",
-    "async": "*"
+    "mocha": "^10.2.0",
+    "expect.js": "^0.3.1",
+    "mock-fs": "^5.2.0"
   },
   "bin": {
     "pjs": "./bin/pjs"
